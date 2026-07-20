@@ -14,5 +14,5 @@ public:
 		setPower(getPower() + 30);
 	}
 
-	void attack() override;
+	void attack(Monster* monster) override;
 };

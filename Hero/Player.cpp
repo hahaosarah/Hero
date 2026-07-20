@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Player.h"
+#include "Monster.h"
 
 using namespace std;
 
@@ -9,6 +10,8 @@ Player::Player(std::string name, int hp, int mp, int power, int defence)
 	: name(name),
 	job("Unknown"),
 	level(1),
+	exp(0),
+	maxExp(100),
 	hp(hp),
 	mp(mp),
 	power(power),
@@ -26,10 +29,13 @@ Player::~Player()
 //printPlayerStatus 함수
 void Player::printPlayerStatus()
 {
-	cout << "==========================================" << endl;
+	cout << "===============================================" << endl;
+	cout << "           " << name << "'s Status                 " << endl;
+	cout << "===============================================" << endl;
 	cout << "Name: " << name << " | Job: " << job << " | Lv." << level << endl;
+	cout << "EXP: " << exp << " / " << maxExp << endl;
 	cout << "HP: " << hp << " | MP: " << mp << " | Attack: " << power << " | Defense: " << defence << endl;
-	cout << "==========================================" << endl;
+	cout << "===============================================" << endl;
 }
 
 
@@ -44,6 +50,33 @@ void Player::takeDamage(int damage)
 	}
 	int newHp = hp - realDamage;
 	setHp(newHp);
+}
+
+
+//gainExp 함수
+void Player::gainExp(int amount)
+{
+	exp += amount;
+
+	while (exp >= maxExp)
+	{
+		cout << endl;
+		cout << "... Level up condition met" << endl;
+
+		exp -= maxExp;
+		int nowlevel = level;
+		level++;
+		hp += 10;
+		mp += 5;
+		power += 5;
+		maxExp = static_cast<int>(maxExp * 1.2);
+		
+		cout << "  -> Level Up! Lv." << nowlevel << " -> Lv." << level << endl;
+		cout << "  -> HP +10, MP +5, Attack +5" << endl;
+	}
+
+	
+	cout << "  -> +" << amount << " EXP! (EXP: " << exp << "/" << maxExp << ")" << endl;
 }
 
 

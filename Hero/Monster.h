@@ -13,16 +13,18 @@ class Monster
 	int defence;
 	std::string dropItemName;
 	int dropItemPrice;
+	int expReward;
 
 
 public:
-	Monster(std::string name, int hp, int power, int defence, std::string dropItemName, int dropItemPrice)
+	Monster(std::string name, int hp, int power, int defence, std::string dropItemName, int dropItemPrice, int expReward)
 		: name(name),
 		hp(hp),
 		power(power),
 		defence(defence),
 		dropItemName(dropItemName),
-		dropItemPrice(dropItemPrice)
+		dropItemPrice(dropItemPrice),
+		expReward(expReward)
 	{
 	}
 
@@ -46,9 +48,17 @@ public:
 		return dropItemPrice;
 	}
 
+	int getExpReward()
+	{
+		return expReward;
+	}
 	
+	int getDefence()
+	{
+		return defence;
+	}
 	
-	//takaDamage 함수 선언
+	//takeDamage 함수 선언
 	void takeDamage(int damage);
 
 	//attack 함수 선언

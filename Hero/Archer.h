@@ -13,6 +13,6 @@ public:
 		job = "Archer";
 		setDefence(getDefence() + 30);
 	}
-	void attack() override;
+	void attack(Monster*monster) override;
 };
 

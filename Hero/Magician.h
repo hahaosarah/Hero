@@ -14,5 +14,5 @@ public:
 		setMp(getMp() + 30);
 	}
 
-	void attack() override;
+	void attack(Monster* monster) override;
 };

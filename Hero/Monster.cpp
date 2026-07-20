@@ -28,12 +28,6 @@ void Monster::setHp(int value)
 //takeDamage ÇÔ¼ö
 void Monster::takeDamage(int damage)
 {
-	int realDamage = damage - defence;
-
-	if (realDamage <= 0)
-	{
-		realDamage = 1;
-	}
-	int newHp = hp - realDamage;
+	int newHp = hp - damage;
 	setHp(newHp);
 }

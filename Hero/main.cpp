@@ -20,7 +20,7 @@ void printStatus(string name, int stat[]);
 bool enterDungeon(Player* player, string name, string jobName, vector<Item>& inventory, int maxInventorySize);
 void showInventory(const vector<Item>& inventory, int maxInventorySize);
 bool checkGameOver(Player* player);
-void handleVictory(Monster* monster, vector<Item>& inventory, int maxInventorySize);
+void handleVictory(Monster* monster, Player* player, vector<Item>& inventory, int maxInventorySize);
 void showPotionShopMenu();
 void setPotion(int count, int* hpPotion, int* mpPotion);
 
@@ -309,20 +309,14 @@ void printStatus(string name, int stat[])
 {
 	// 상태창 출력
 	cout << "===============================================" << endl;
-	cout << "                 ";
-	cout << name;
-	cout << "'s Stats                  " << endl;
+	cout << "           " << name << "'s Status                 " << endl;
 	cout << "===============================================" << endl;
-	cout << "           HP: ";
-	cout << stat[0];
-	cout << "         MP: ";
-	cout << stat[1];
+	cout << "           HP: " << stat[0];
+	cout << "         MP: " << stat[1];
 	cout << "               " << endl;
 
-	cout << "        Attack: ";
-	cout << stat[2];
-	cout << "     Defense: ";
-	cout << stat[3];
+	cout << "        Attack: " << stat[2];
+	cout << "     Defense: " << stat[3];
 	cout << "            " << endl;
 	cout << "===============================================" << endl;
 }
@@ -375,10 +369,14 @@ bool enterDungeon(Player* player, string name, string jobName, vector<Item>& inv
 		while (player->getHp() > 0 && monster->getHp() > 0)
 		{
 			cout << " ----------  Player Turn ---------- " << endl;
-			player->attack();
+			
 
 			int beforeMonsterHp = monster->getHp();
-			monster->takeDamage(player->getPower());
+
+			player->attack(monster);
+			/*monster->takeDamage(player->getPower());*/
+			//Warrior::attack(monster) 안에서 이미 몬스터에게 데미지를 주고 있기 때문
+
 			int afterMonsterHp = monster->getHp();
 
 			cout << monster->getName() << " HP: " << beforeMonsterHp << " -> " << afterMonsterHp;
@@ -394,7 +392,7 @@ bool enterDungeon(Player* player, string name, string jobName, vector<Item>& inv
 
 			if (monster->getHp() <= 0)
 			{
-				handleVictory(monster, inventory, maxInventorySize);
+				handleVictory(monster, player, inventory, maxInventorySize);
 				return false;
 			}
 
@@ -479,11 +477,17 @@ bool checkGameOver(Player* player)
 
 
 //Victory 함수 정의
-void handleVictory(Monster* monster, vector<Item>& inventory, int maxInventorySize)
+void handleVictory(Monster* monster, Player* player, vector<Item>& inventory, int maxInventorySize)
 {
 	if (monster != nullptr && monster->getHp() <= 0)
 	{
 		cout << "★ Victory!" << endl;
+
+		if(player != nullptr)
+		{
+			player->gainExp(monster->getExpReward());
+		}
+
 		cout << "  -> Got: " << monster->getDropItemName() << "!" << endl;
 
 		Item droppedItem;

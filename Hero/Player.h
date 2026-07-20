@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+class Monster; // Forward declaration of Monster class
+
 class Player
 { 
 protected:
@@ -19,11 +21,12 @@ protected:
 public:
 	Player(std::string name, int hp, int mp, int power, int defence);
 
-
-	virtual void attack() = 0;
+	
+	virtual void attack(Monster* monster) = 0;
 	void printPlayerStatus();
 	virtual ~Player();
 	void takeDamage(int damage);
+	void gainExp(int amount);
 
 	int getHp();
 	void setHp(int value);
