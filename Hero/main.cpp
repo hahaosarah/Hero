@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <algorithm>
 #include "Player.h"
 #include "Warrior.h"
 #include "Magician.h"
@@ -23,6 +24,7 @@ bool checkGameOver(Player* player);
 void handleVictory(Monster* monster, Player* player, vector<Item>& inventory, int maxInventorySize);
 void showPotionShopMenu();
 void setPotion(int count, int* hpPotion, int* mpPotion);
+void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventory, int maxInventorySize);
 
 //main 함수
 int main()
@@ -369,13 +371,10 @@ bool enterDungeon(Player* player, string name, string jobName, vector<Item>& inv
 		while (player->getHp() > 0 && monster->getHp() > 0)
 		{
 			cout << " ----------  Player Turn ---------- " << endl;
-			
 
 			int beforeMonsterHp = monster->getHp();
-
-			player->attack(monster);
-			/*monster->takeDamage(player->getPower());*/
-			//Warrior::attack(monster) 안에서 이미 몬스터에게 데미지를 주고 있기 때문
+			
+			choosePlayerAction(player, monster, inventory, maxInventorySize);
 
 			int afterMonsterHp = monster->getHp();
 
@@ -583,4 +582,96 @@ void setPotion(int count, int* hpPotion, int* mpPotion)
 {
 	*hpPotion = count;
 	*mpPotion = count;
+}
+
+
+//choose Player Action 함수 정의
+void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventory, int maxInventorySize)
+{
+	if (player == nullptr || monster == nullptr)
+	{
+		cout << "Error: Player or Monster is null." << endl;
+		return;
+	}
+	
+	cout << "1. Attack" << endl;
+	cout << "2. Use Item" << endl;	
+	cout << "Choose: " << endl;
+
+
+	int actionChoice = 0;
+	cin >> actionChoice;
+
+	switch (actionChoice)
+	{
+	case 1:
+	{
+		player->attack(monster);
+		break;
+	}
+	case 2:
+	{
+		int itemChoice = 0;
+		int selectedIndex;
+		Item selectedItem;
+		int beforeHp;
+		int afterHp;
+		int beforeMp;
+		int afterMp;	
+		int recoverAmount;
+
+		if (inventory.empty())
+		{
+			cout << "Inventory is empty." << endl;
+			break;
+		}
+
+		showInventory(inventory, maxInventorySize);
+
+		cout << "Choose item: " << endl;
+		cin >> itemChoice;
+
+		if (itemChoice < 1 || itemChoice > inventory.size())
+		{
+			cout << "Invalid item choice." << endl;
+			break;
+		}
+		
+		selectedIndex = itemChoice - 1;
+		selectedItem = inventory[selectedIndex];	
+
+		if(selectedItem.name == "HP Potion")
+		{
+			beforeHp = player->getHp();
+			recoverAmount = 50;
+			afterHp = min(beforeHp + recoverAmount, player->getMaxHp());
+			player->setHp(afterHp);
+			cout << "* HP Potion used! HP recovered by " << recoverAmount << ". (" << beforeHp << " -> " << afterHp << ")" << endl;
+			inventory.erase(inventory.begin() + selectedIndex);
+		}
+		else if(selectedItem.name == "MP Potion")
+		{
+			beforeMp = player->getMp();
+			recoverAmount = 50;
+			afterMp = min(beforeMp + recoverAmount, player->getMaxMp());
+			player->setMp(afterMp);
+			cout << "* MP Potion used! MP recovered by " << recoverAmount << ". (" << beforeMp << " -> " << afterMp << ")" << endl;
+			inventory.erase(inventory.begin() + selectedIndex);
+		}
+		else
+		{
+			cout << "* Cannot use this item." << endl;
+			break;
+		}
+		break;
+	}
+
+	default:
+	{
+		cout << "Invalid choice. Please try again." << endl;
+		break;
+	}
+		
+		
+	}
 }

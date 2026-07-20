@@ -8,10 +8,9 @@ class Archer : public Player
 {
 public:
 	Archer(std::string name, int hp, int mp, int power, int defence)
-		: Player(name, hp, mp, power, defence)
+		: Player(name, hp, mp, power, defence + 30, hp, mp)
 	{
 		job = "Archer";
-		setDefence(getDefence() + 30);
 	}
 	void attack(Monster*monster) override;
 };

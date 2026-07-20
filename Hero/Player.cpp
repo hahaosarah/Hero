@@ -6,14 +6,16 @@
 using namespace std;
 
 //Player 생성자
-Player::Player(std::string name, int hp, int mp, int power, int defence)
+Player::Player(std::string name, int hp, int mp, int power, int defence, int maxHp, int maxMp)
 	: name(name),
 	job("Unknown"),
 	level(1),
 	exp(0),
 	maxExp(100),
 	hp(hp),
+	maxHp(maxHp),
 	mp(mp),
+	maxMp(maxMp),
 	power(power),
 	defence(defence)
 	//생성자에서는 모든 멤버 변수에 초기값을 넣어준다
@@ -34,7 +36,8 @@ void Player::printPlayerStatus()
 	cout << "===============================================" << endl;
 	cout << "Name: " << name << " | Job: " << job << " | Lv." << level << endl;
 	cout << "EXP: " << exp << " / " << maxExp << endl;
-	cout << "HP: " << hp << " | MP: " << mp << " | Attack: " << power << " | Defense: " << defence << endl;
+	cout << "HP: " << hp << " / " << maxHp << " | MP: " << mp << " / " << maxMp << endl;
+	cout << "Attack: " << power << " | Defense: " << defence << endl;
 	cout << "===============================================" << endl;
 }
 
@@ -66,8 +69,10 @@ void Player::gainExp(int amount)
 		exp -= maxExp;
 		int nowlevel = level;
 		level++;
-		hp += 10;
-		mp += 5;
+		maxHp += 10;
+		maxMp += 5;
+		hp = maxHp;
+		mp = maxMp;
 		power += 5;
 		maxExp = static_cast<int>(maxExp * 1.2);
 		
@@ -144,3 +149,13 @@ void Player::setDefence(int value)
 		defence = value;
 	}
 }
+
+int Player::getMaxHp()
+{
+	return maxHp;
+}	
+
+int Player::getMaxMp()
+{
+	return maxMp;
+}	

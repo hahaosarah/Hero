@@ -12,14 +12,16 @@ protected:
 	std::string job;
 	int level;
 	int hp;
+	int maxHp;
 	int mp;
+	int maxMp;
 	int power;
 	int defence;
 	int exp;
 	int maxExp;
 
 public:
-	Player(std::string name, int hp, int mp, int power, int defence);
+	Player(std::string name, int hp, int mp, int power, int defence, int maxHp, int maxMp);
 
 	
 	virtual void attack(Monster* monster) = 0;
@@ -36,6 +38,9 @@ public:
 	void setPower(int value);
 	int getDefence();
 	void setDefence(int value);
+
+	int getMaxHp();
+	int getMaxMp();
 
 };
 

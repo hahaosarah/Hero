@@ -8,10 +8,9 @@ class Thief : public Player
 {
 public:
 	Thief(std::string name, int hp, int mp, int power, int defence)
-		: Player(name, hp, mp, power, defence)
+		: Player(name, hp, mp, power + 30, defence, hp, mp)
 	{
 		job = "Rogue";
-		setPower(getPower() + 30);
 	}
 
 	void attack(Monster* monster) override;
