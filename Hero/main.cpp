@@ -3,6 +3,7 @@
 #include <vector>
 #include <limits>
 #include <algorithm>
+#include <map>
 #include "Player.h"
 #include "Warrior.h"
 #include "Magician.h"
@@ -443,7 +444,7 @@ void showInventory(Inventory<Item>& inventory, int maxInventorySize)
 {
 	cout << "    " << endl;
 	cout << "===============================================" << endl;
-	cout << "    [ Inventory sorted by price (" << inventory.GetSize() << " / " << maxInventorySize << ") ] " << endl;
+	cout << "    [ Inventory sorted by price (" << inventory.GetSize() << " / " << inventory.GetCapacity() << ") ] " << endl;
 	cout << "===============================================" << endl;
 	if (inventory.IsEmpty())
 	{
@@ -492,20 +493,13 @@ void handleVictory(Monster* monster, Player* player, Inventory<Item>& inventory,
 		droppedItem.name = monster->getDropItemName();
 		droppedItem.price = monster->getDropItemPrice();
 
-		if (inventory.IsFull())
-		{
-			cout << "Inventory is full." << endl;
-		}
-		else
-		{
-			inventory.AddItem(droppedItem);
-			cout << " -> Saved to inventory." << endl;
-		}
+		inventory.AddItem(droppedItem);
+		cout << " -> Saved to inventory." << endl;
 	}
 }
 
 
-//Potion Shop 함수 정의
+//Show Potion Shop 함수 정의
 void showPotionShopMenu()
 {
 	AlchemyWorkshop workshop;
@@ -525,6 +519,9 @@ void showPotionShopMenu()
 		cout << "1. Show all recipes" << endl;
 		cout << "2. Search by potion name" << endl;
 		cout << "3. Search by ingredient" << endl;
+		cout << "4. Check potion stock" << endl;
+		cout << "5. Dispense potion" << endl;
+		cout << "6. Return potion" << endl;
 		cout << "0. Go Back" << endl;
 		cout << endl;
 		cout << "Choose: ";
@@ -543,28 +540,72 @@ void showPotionShopMenu()
 		switch (potionChoice)
 		{
 		case 1:
+		{
 			workshop.ShowAllRecipes();
 			break;
+		}
+			
 
 		case 2:
+		{
 			cout << "Search potion name: ";
 			getline(cin >> ws, searchPotionName);
 			workshop.SearchByName(searchPotionName);
 			break;
+		}
+			
 
 		case 3:
+		{
 			cout << "Search ingredient: ";
 			getline(cin >> ws, searchIngredient);
 			workshop.SearchByIngredient(searchIngredient);
 			break;
+		}
+			
+
+		case 4:
+		{
+			cout << "Enter potion name to check stock: ";
+			getline(cin >> ws, searchPotionName);
+			int stock;
+			stock = workshop.GetStock(searchPotionName);
+			cout << "Stock of " << searchPotionName << ": " << stock << endl;
+			break;
+		}
+			
+
+		case 5:
+		{
+			cout << "Enter potion name to dispense: ";
+			getline(cin >> ws, searchPotionName);
+			workshop.DispensePotion(searchPotionName);
+			break;
+		}
+			
+
+		case 6:
+		{
+			cout << "Enter potion name to return: ";
+			getline(cin >> ws, searchPotionName);
+			workshop.ReturnPotion(searchPotionName);
+			break;
+		}
+			
 
 		case 0:
+		{
 			potionShopStart = false;
 			break;
+		}
+			
 
 		default:
+		{
 			cout << "Invalid choice. Please try again." << endl;
 			break;
+		}
+			
 		}
 	}
 

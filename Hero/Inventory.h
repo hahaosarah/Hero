@@ -69,7 +69,8 @@ public:
 	//AddItem 아이템	추가 함수
 	void AddItem(const T& item) 
 	{
-		std::cout << " Adding item...(10/10 full)" << std::endl;
+		std::cout << " Adding item...(" << size_ << "/" << capacity_ << ")" << std::endl;
+
 		/*items.push_back(item);*/
 		if (size_ >= capacity_) 
 		{

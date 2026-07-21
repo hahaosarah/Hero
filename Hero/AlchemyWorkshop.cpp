@@ -49,6 +49,13 @@ AlchemyWorkshop::AlchemyWorkshop()
 
 	recipes.push_back(strengthPotion);
 	// 여기서 recipes에 기본 레시피들을 push_back
+
+
+	potionStock_["HPPotion"] = MAX_STOCK;
+	potionStock_["MPPotion"] = MAX_STOCK;
+	potionStock_["StaminaPotion"] = MAX_STOCK;
+	potionStock_["AntidotePotion"] = MAX_STOCK;
+	potionStock_["StrengthPotion"] = MAX_STOCK;
 }
 
 
@@ -87,7 +94,6 @@ void AlchemyWorkshop::SearchByName(std::string name)
 //SearchByIngredient 함수
 void AlchemyWorkshop::SearchByIngredient(std::string ingredient)
 {
-	bool searchIngredient = false;
 	int foundCount = 0;
 
 	for (int i = 0; i < recipes.size(); i++)
@@ -95,7 +101,6 @@ void AlchemyWorkshop::SearchByIngredient(std::string ingredient)
 		if (recipes[i].ingredient1 == ingredient || recipes[i].ingredient2 == ingredient)
 		{
 			recipes[i].PrintInfo();
-			searchIngredient = true;
 			foundCount++;
 		}
 	}
@@ -107,5 +112,63 @@ void AlchemyWorkshop::SearchByIngredient(std::string ingredient)
 	else
 	{
 		cout << "Found " << foundCount << " recipes." << endl;
+	}
+}
+
+
+//DispensePotion 함수
+void AlchemyWorkshop::DispensePotion(const std::string& name)
+{
+	if (potionStock_.find(name) != potionStock_.end())
+	{
+		if (potionStock_[name] > 0)
+		{
+			potionStock_[name]--;
+			std::cout << "-> Dispense " << name << " (stock: " << potionStock_[name] << ")" << std::endl;
+		}
+		else
+		{
+			std::cout << "-> Dispense failed: out of stock!" << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Potion not found in stock." << std::endl;
+	}
+}
+
+
+//ReturnPotion 함수
+void AlchemyWorkshop::ReturnPotion(const std::string& name)
+{
+	if (potionStock_.find(name) != potionStock_.end())
+	{
+		if (potionStock_[name] < MAX_STOCK)
+		{
+			potionStock_[name]++;
+			std::cout << "-> Return empty bottle  (stock: " << potionStock_[name] << ")" << std::endl;
+		}
+		else
+		{
+			std::cout << "Stock for " << name << " is already full." << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Potion not found in stock." << std::endl;
+	}
+}
+
+
+//GetStock 함수
+int AlchemyWorkshop::GetStock(const std::string& name)
+{
+	if (potionStock_.find(name) != potionStock_.end())
+	{
+		return potionStock_[name];
+	}
+	else
+	{
+		return 0;
 	}
 }
