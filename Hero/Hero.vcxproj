@@ -126,6 +126,7 @@
     <ClInclude Include="AlchemyWorkshop.h" />
     <ClInclude Include="Archer.h" />
     <ClInclude Include="Goblin.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Magician.h" />
     <ClInclude Include="Monster.h" />

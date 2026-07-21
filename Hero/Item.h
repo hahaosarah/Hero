@@ -11,4 +11,8 @@ struct Item
 
 	void PrintInfo() const;
 	
+	bool operator==(const Item& other) const
+	{
+		return name == other.name && price == other.price;
+	}
 };

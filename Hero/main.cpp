@@ -14,23 +14,27 @@
 #include "Item.h"
 #include "AlchemyWorkshop.h"
 #include "PotionRecipe.h"
+#include "Inventory.h"
 
 using namespace std;
 
 void printStatus(string name, int stat[]);
-bool enterDungeon(Player* player, string name, string jobName, vector<Item>& inventory, int maxInventorySize);
-void showInventory(const vector<Item>& inventory, int maxInventorySize);
+bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& inventory, int maxInventorySize);
+void showInventory(const Inventory<Item>& inventory, int maxInventorySize);
 bool checkGameOver(Player* player);
-void handleVictory(Monster* monster, Player* player, vector<Item>& inventory, int maxInventorySize);
+void handleVictory(Monster* monster, Player* player, Inventory<Item>& inventory, int maxInventorySize);
 void showPotionShopMenu();
 void setPotion(int count, int* hpPotion, int* mpPotion);
-void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventory, int maxInventorySize);
+void choosePlayerAction(Player* player, Monster* monster, Inventory<Item>& inventory, int maxInventorySize);
 
 //main 함수
 int main()
 {
 	//inventory 선언
-	vector<Item> inventory;
+	Inventory<Item> inventory;
+	/*vector<Item> inventory;*/
+	inventory.AddItem({ "HP Potion", 50 });
+	inventory.AddItem({ "MP Potion", 50 });
 
 	cout << "===============================================" << endl;
 	cout << "                 [ Hello Hero ]                " << endl;
@@ -325,7 +329,7 @@ void printStatus(string name, int stat[])
 
 
 //Enter Dungeon 함수 정의
-bool enterDungeon(Player* player, string name, string jobName, vector<Item>& inventory, int maxInventorySize)
+bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& inventory, int maxInventorySize)
 {
 	Slime slime;
 	Goblin goblin;
@@ -435,26 +439,20 @@ bool enterDungeon(Player* player, string name, string jobName, vector<Item>& inv
 
 
 //Check Inventory 함수 정의
-void showInventory(const vector<Item>& inventory, int maxInventorySize)
+void showInventory(const Inventory<Item>& inventory, int maxInventorySize)
 {
 	cout << "    " << endl;
 	cout << "===============================================" << endl;
-	cout << "             [ Inventory (" << inventory.size() << " / " << maxInventorySize << ") ] " << endl;
+	cout << "             [ Inventory (" << inventory.GetSize() << " / " << maxInventorySize << ") ] " << endl;
 	cout << "===============================================" << endl;
-	if (inventory.empty())
+	if (inventory.IsEmpty())
 	{
 		cout << "Inventory is empty." << endl;
 	}
 	
 	else
 	{
-		int number = 1;
-
-		for (const Item& item : inventory)
-		{
-			cout << number << ". " << item.name << " (" << item.price << "G)" << endl;
-			number++;
-		}
+		inventory.ShowInventory();
 	}
 }
 
@@ -476,7 +474,7 @@ bool checkGameOver(Player* player)
 
 
 //Victory 함수 정의
-void handleVictory(Monster* monster, Player* player, vector<Item>& inventory, int maxInventorySize)
+void handleVictory(Monster* monster, Player* player, Inventory<Item>& inventory, int maxInventorySize)
 {
 	if (monster != nullptr && monster->getHp() <= 0)
 	{
@@ -493,13 +491,13 @@ void handleVictory(Monster* monster, Player* player, vector<Item>& inventory, in
 		droppedItem.name = monster->getDropItemName();
 		droppedItem.price = monster->getDropItemPrice();
 
-		if (inventory.size() >= maxInventorySize)
+		if (inventory.IsFull(maxInventorySize))
 		{
 			cout << "Inventory is full." << endl;
 		}
 		else
 		{
-			inventory.push_back(droppedItem);
+			inventory.AddItem(droppedItem);
 			cout << " -> Saved to inventory." << endl;
 		}
 	}
@@ -586,7 +584,7 @@ void setPotion(int count, int* hpPotion, int* mpPotion)
 
 
 //choose Player Action 함수 정의
-void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventory, int maxInventorySize)
+void choosePlayerAction(Player* player, Monster* monster, Inventory<Item>& inventory, int maxInventorySize)
 {
 	if (player == nullptr || monster == nullptr)
 	{
@@ -620,7 +618,7 @@ void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventor
 		int afterMp;	
 		int recoverAmount;
 
-		if (inventory.empty())
+		if (inventory.IsEmpty())
 		{
 			cout << "Inventory is empty." << endl;
 			break;
@@ -631,14 +629,14 @@ void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventor
 		cout << "Choose item: " << endl;
 		cin >> itemChoice;
 
-		if (itemChoice < 1 || itemChoice > inventory.size())
+		if (itemChoice < 1 || itemChoice > inventory.GetSize())
 		{
 			cout << "Invalid item choice." << endl;
 			break;
 		}
 		
 		selectedIndex = itemChoice - 1;
-		selectedItem = inventory[selectedIndex];	
+		inventory.GetItemAt(selectedIndex, selectedItem);
 
 		if(selectedItem.name == "HP Potion")
 		{
@@ -647,7 +645,7 @@ void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventor
 			afterHp = min(beforeHp + recoverAmount, player->getMaxHp());
 			player->setHp(afterHp);
 			cout << "* HP Potion used! HP recovered by " << recoverAmount << ". (" << beforeHp << " -> " << afterHp << ")" << endl;
-			inventory.erase(inventory.begin() + selectedIndex);
+			inventory.RemoveItemAt(selectedIndex);
 		}
 		else if(selectedItem.name == "MP Potion")
 		{
@@ -656,7 +654,7 @@ void choosePlayerAction(Player* player, Monster* monster, vector<Item>& inventor
 			afterMp = min(beforeMp + recoverAmount, player->getMaxMp());
 			player->setMp(afterMp);
 			cout << "* MP Potion used! MP recovered by " << recoverAmount << ". (" << beforeMp << " -> " << afterMp << ")" << endl;
-			inventory.erase(inventory.begin() + selectedIndex);
+			inventory.RemoveItemAt(selectedIndex);
 		}
 		else
 		{
