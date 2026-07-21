@@ -16,3 +16,7 @@ struct Item
 		return name == other.name && price == other.price;
 	}
 };
+
+
+// compareByPrice 함수 선언
+bool compareByPrice(const Item& a, const Item& b);

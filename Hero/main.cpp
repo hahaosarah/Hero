@@ -20,7 +20,7 @@ using namespace std;
 
 void printStatus(string name, int stat[]);
 bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& inventory, int maxInventorySize);
-void showInventory(const Inventory<Item>& inventory, int maxInventorySize);
+void showInventory(Inventory<Item>& inventory, int maxInventorySize);
 bool checkGameOver(Player* player);
 void handleVictory(Monster* monster, Player* player, Inventory<Item>& inventory, int maxInventorySize);
 void showPotionShopMenu();
@@ -438,12 +438,12 @@ bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& 
 }
 
 
-//Check Inventory 함수 정의
-void showInventory(const Inventory<Item>& inventory, int maxInventorySize)
+//Show Inventory 함수 정의
+void showInventory(Inventory<Item>& inventory, int maxInventorySize)
 {
 	cout << "    " << endl;
 	cout << "===============================================" << endl;
-	cout << "             [ Inventory (" << inventory.GetSize() << " / " << maxInventorySize << ") ] " << endl;
+	cout << "    [ Inventory sorted by price (" << inventory.GetSize() << " / " << maxInventorySize << ") ] " << endl;
 	cout << "===============================================" << endl;
 	if (inventory.IsEmpty())
 	{
@@ -452,6 +452,7 @@ void showInventory(const Inventory<Item>& inventory, int maxInventorySize)
 	
 	else
 	{
+		inventory.SortItems();
 		inventory.ShowInventory();
 	}
 }
@@ -491,7 +492,7 @@ void handleVictory(Monster* monster, Player* player, Inventory<Item>& inventory,
 		droppedItem.name = monster->getDropItemName();
 		droppedItem.price = monster->getDropItemPrice();
 
-		if (inventory.IsFull(maxInventorySize))
+		if (inventory.IsFull())
 		{
 			cout << "Inventory is full." << endl;
 		}
