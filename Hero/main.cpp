@@ -481,7 +481,9 @@ bool checkGameOver(Player* player)
 	if (player != nullptr && player->getHp() <= 0)
 	{
 		cout << "¡Ú Defeat..." << endl;
-		cout << "(Game Over)" << endl;
+		cout << "===============================================" << endl;
+		cout << "                  GAME OVER!                   " << endl;
+		cout << "===============================================" << endl;
 		cout << "Please restart the program to play again." << endl;
 
 		return true;
