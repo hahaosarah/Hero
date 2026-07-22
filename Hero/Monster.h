@@ -57,6 +57,11 @@ public:
 	{
 		return defence;
 	}
+
+	int getPower()
+	{
+		return power;
+	}
 	
 	//takeDamage 함수 선언
 	void takeDamage(int damage);

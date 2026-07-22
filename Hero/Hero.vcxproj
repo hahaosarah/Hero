@@ -125,11 +125,13 @@
   <ItemGroup>
     <ClInclude Include="AlchemyWorkshop.h" />
     <ClInclude Include="Archer.h" />
+    <ClInclude Include="BossDragon.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Magician.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Orc.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PotionRecipe.h" />
     <ClInclude Include="Slime.h" />
@@ -139,11 +141,13 @@
   <ItemGroup>
     <ClCompile Include="AlchemyWorkshop.cpp" />
     <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="BossDragon.cpp" />
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Magician.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Orc.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PotionRecipe.cpp" />
     <ClCompile Include="Slime.cpp" />

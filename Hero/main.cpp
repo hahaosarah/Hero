@@ -16,11 +16,13 @@
 #include "AlchemyWorkshop.h"
 #include "PotionRecipe.h"
 #include "Inventory.h"
+#include "Orc.h"
+#include "BossDragon.h"
 
 using namespace std;
 
 void printStatus(string name, int stat[]);
-bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& inventory, int maxInventorySize);
+bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& inventory, int maxInventorySize, int& clearedRoomCount);
 void showInventory(Inventory<Item>& inventory, int maxInventorySize);
 bool checkGameOver(Player* player);
 void handleVictory(Monster* monster, Player* player, Inventory<Item>& inventory, int maxInventorySize);
@@ -31,6 +33,8 @@ void choosePlayerAction(Player* player, Monster* monster, Inventory<Item>& inven
 //main 함수
 int main()
 {
+	int clearedRoomCount = 0;
+
 	//inventory 선언
 	Inventory<Item> inventory;
 	/*vector<Item> inventory;*/
@@ -253,7 +257,7 @@ int main()
 		{
 		case 1:
 		{
-			bool isGameOver = enterDungeon(player, name, jobName, inventory, maxInventorySize);
+			bool isGameOver = enterDungeon(player, name, jobName, inventory, maxInventorySize, clearedRoomCount);
 
 			if (isGameOver)
 			{
@@ -330,39 +334,33 @@ void printStatus(string name, int stat[])
 
 
 //Enter Dungeon 함수 정의
-bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& inventory, int maxInventorySize)
+bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& inventory, int maxInventorySize, int& clearedRoomCount)
 {
 	Slime slime;
 	Goblin goblin;
+	Orc orc;
+	BossDragon bossDragon;
 
 	Monster* monster = nullptr;
+	vector<Monster*> monsterRooms = { &slime, &goblin, &orc, &bossDragon };
 
 	cout << "      " << endl;
 	cout << "===============================================" << endl;
-	cout << "             [ Monster Selection ]             " << endl;
+	cout << "              [ Dungeon Floor 1 ]              " << endl;
 	cout << "===============================================" << endl;
-	cout << "1. Slime   2. Goblin" << endl;
 
-	int monsterChoice = 0;
-
-	while (monster == nullptr)
+	
+	
+	if (clearedRoomCount >= 0&& clearedRoomCount < monsterRooms.size())
 	{
-		cout << "Choose: ";
-		cin >> monsterChoice;
-
-		if (monsterChoice == 1)
-		{
-			monster = &slime;
-		}
-		else if (monsterChoice == 2)
-		{
-			monster = &goblin;
-		}
-		else
-		{
-			cout << "Invalid monster choice!" << endl;
-		}
+		monster = monsterRooms[clearedRoomCount];
 	}
+	else
+	{
+		cout << "Invalid monster choice!" << endl;
+		return false;
+	}
+	
 	
 
 	//Player VS Monster
@@ -371,10 +369,11 @@ bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& 
 
 		cout << "[ Battle Start! ] " << name << "(" << jobName << ")" << " vs " << monster->getName() << endl;
 		cout << "         " << endl;
-
+		int monsterStartHp = monster->getHp();
 
 		while (player->getHp() > 0 && monster->getHp() > 0)
 		{
+
 			cout << " ----------  Player Turn ---------- " << endl;
 
 			int beforeMonsterHp = monster->getHp();
@@ -397,6 +396,23 @@ bool enterDungeon(Player* player, string name, string jobName, Inventory<Item>& 
 			if (monster->getHp() <= 0)
 			{
 				handleVictory(monster, player, inventory, maxInventorySize);
+				cout << "Room " << clearedRoomCount + 1 << ": " << monster->getName() << "   (HP " << monsterStartHp << ", Attack "<< monster->getPower() << ")     -> Clear!" << endl;
+
+				if (clearedRoomCount == 3)
+				{
+					cout << "===============================================" << endl;
+					cout << "                 GAME CLEAR!                   " << endl;
+					cout << "===============================================" << endl;
+					return true;
+				}
+
+				clearedRoomCount++;
+
+				if (clearedRoomCount == 3)
+				{
+					cout << "★ Boss Room Unlocked!" << endl;
+				}
+
 				return false;
 			}
 

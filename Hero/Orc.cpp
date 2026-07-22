@@ -2,11 +2,11 @@
 #include <string>
 #include "Player.h"
 #include "Monster.h"
-#include "Goblin.h"
+#include "Orc.h"
 
 using namespace std;
 
-Goblin::Goblin()
-	: Monster("Goblin", 50, 25, 10, "Goblin Dagger", 300, 50)
+Orc::Orc()
+	: Monster("Orc", 80, 35, 15, "Orc Club", 500, 80)
 {
 }

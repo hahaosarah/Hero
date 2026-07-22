@@ -12,40 +12,40 @@ AlchemyWorkshop::AlchemyWorkshop()
 	//HPPotion
 	PotionRecipe hpPotion;
 	hpPotion.name = "HPPotion";
-	hpPotion.ingredient1 = "Herb";
-	hpPotion.ingredient2 = "Clear Water";
+	hpPotion.ingredient1 = "Slime Jelly";
+	hpPotion.ingredient2 = "Goblin Dagger";
 
 	recipes.push_back(hpPotion);
 
 	//MPPotion
 	PotionRecipe mpPotion;
 	mpPotion.name = "MPPotion";
-	mpPotion.ingredient1 = "Mana Flower";
-	mpPotion.ingredient2 = "Slime Jelly";
+	mpPotion.ingredient1 = "Slime Jelly";
+	mpPotion.ingredient2 = "Orc Club";
 
 	recipes.push_back(mpPotion);
 
 	//StaminaPotion
 	PotionRecipe staminaPotion;
 	staminaPotion.name = "StaminaPotion";
-	staminaPotion.ingredient1 = "Herb";
-	staminaPotion.ingredient2 = "Berry";
+	staminaPotion.ingredient1 = "Slime Jelly";
+	staminaPotion.ingredient2 = "Dragon Scale";
 
 	recipes.push_back(staminaPotion);
 
 	//AntidotePotion
 	PotionRecipe antidotePotion;
 	antidotePotion.name = "AntidotePotion";
-	antidotePotion.ingredient1 = "Green Mushroom";
-	antidotePotion.ingredient2 = "Slime Jelly";
+	antidotePotion.ingredient1 = "Goblin Dagger";
+	antidotePotion.ingredient2 = "Orc Club";
 
 	recipes.push_back(antidotePotion);
 
 	//StrengthPotion
 	PotionRecipe strengthPotion;
 	strengthPotion.name = "StrengthPotion";
-	strengthPotion.ingredient1 = "Goblin Fang";
-	strengthPotion.ingredient2 = "Berry";
+	strengthPotion.ingredient1 = "Goblin Dagger";
+	strengthPotion.ingredient2 = "Dragon Scale";
 
 	recipes.push_back(strengthPotion);
 	// 여기서 recipes에 기본 레시피들을 push_back
